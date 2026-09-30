@@ -384,7 +384,7 @@ function render(){
   const nav=[['dash','Tableau de bord',0],['cal','Calendrier',s.late],['reg','Registre',0],['nc','Non-conformités',s.openNc],['set','Réglages et aide',0]];
   $('#app').innerHTML=
    '<div class="shell"><aside class="side"><div class="side-in">'+
-   '<div class="brand">'+BRAND+'<div><b>Vigie Biomédicale</b><small>Symbia Pro.Specta X3<br>Hôpital Dogta-Lafiè, Lomé</small></div></div>'+
+   '<div class="brand">'+BRAND+'<div><b>Mon assistant biomed</b><small>Symbia Pro.Specta X3<br>Hôpital Dogta-Lafiè, Lomé</small></div></div>'+
    '<nav class="nav" aria-label="Sections">'+nav.map(function(n){
       return '<button type="button" data-nav="'+n[0]+'"'+(view===n[0]?' aria-current="page"':'')+'>'+n[1]+(n[2]?'<span class="pill'+(n[0]==='nc'?' amber':'')+'">'+n[2]+'</span>':'')+'</button>';
    }).join('')+'</nav>'+
