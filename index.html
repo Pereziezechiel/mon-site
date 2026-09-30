@@ -1,6 +1,48 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <style>
+#login-screen {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  background: #25436B; z-index: 9999;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: white; font-family: sans-serif;
+}
+#login-screen input {
+  padding: 12px; border-radius: 8px; border: none;
+  margin: 15px 0; width: 250px; text-align: center;
+  font-size: 16px;
+}
+#login-screen button {
+  background: white; color: #25436B; border: none;
+  padding: 12px 30px; border-radius: 8px;
+  font-weight: bold; cursor: pointer;
+}
+</style>
+  <div id="login-screen">
+  <img src="icon.png" width="90" style="border-radius:20px; margin-bottom:15px;">
+  <h2>Suivi Qualité</h2>
+  <p>Accès sécurisé</p>
+  <input type="password" id="codeInput" placeholder="Code d'accès">
+  <button onclick="checkCode()">Entrer</button>
+  <p id="error" style="color:#ff8a8a; margin-top:10px; display:none;">Code incorrect</p>
+</div>
+
+<script>
+function checkCode(){
+  var code = document.getElementById('codeInput').value;
+  if(code === 'Dogtalafie2026'){
+    localStorage.setItem('auth','ok');
+    document.getElementById('login-screen').style.display='none';
+  } else {
+    document.getElementById('error').style.display='block';
+  }
+}
+if(localStorage.getItem('auth') === 'ok'){
+  document.getElementById('login-screen').style.display='none';
+}
+</script>
   <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icon.png">
 <meta charset="utf-8">
