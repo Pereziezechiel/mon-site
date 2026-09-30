@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vigie Biomédicale — Symbia Pro.Specta X3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#EFF1F4; --surface:#FFFFFF; --text:#1B2430; --muted:#5B6675; --line:#D6DBE3;
+  --ink:#141D2B; --ink-text:#D7DCE6; --ink-muted:#8B94A6; --ink-line:#26314480;
+  --accent:#25436B; --accent-ink:#FFFFFF;
+  --ok:#2E6B4F; --ok-bg:#E1ECE4; --warn:#8A5A12; --warn-bg:#F3E7D2; --bad:#93332B; --bad-bg:#F1DEDB; --mute-bg:#E5E8EE;
+  --lamp-ok:#2E6B4F; --lamp-warn:#B67C1E; --lamp-bad:#93332B;
+  --font-display:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --font-body:"Public Sans","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101620; --surface:#171E2A; --text:#E2E6EE; --muted:#9BA4B4; --line:#2B3444;
+    --ink:#0A0E16; --ink-text:#CBD2E0; --ink-muted:#7E869A; --ink-line:#232D3F;
+    --accent:#7FA3D6; --accent-ink:#0E1620;
+    --ok:#7FBE9C; --ok-bg:#16291F; --warn:#DCB169; --warn-bg:#332711; --bad:#E29A92; --bad-bg:#331C19; --mute-bg:#1C2432;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101620; --surface:#171E2A; --text:#E2E6EE; --muted:#9BA4B4; --line:#2B3444;
+  --ink:#0A0E16; --ink-text:#CBD2E0; --ink-muted:#7E869A; --ink-line:#232D3F;
+  --accent:#7FA3D6; --accent-ink:#0E1620;
+  --ok:#7FBE9C; --ok-bg:#16291F; --warn:#DCB169; --warn-bg:#332711; --bad:#E29A92; --bad-bg:#331C19; --mute-bg:#1C2432;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2,h3{font-family:var(--font-display);font-weight:700;line-height:1.15;margin:0;letter-spacing:-.01em}
+h1{font-size:2rem}
+h2{font-size:1.25rem}
+h3{font-size:1.05rem}
+p{margin:0 0 .75em}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Structure */
+.shell{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+.side{background:var(--ink);color:var(--ink-text)}
+.side-in{position:sticky;top:env(safe-area-inset-top,0px);padding:22px 16px 18px;display:flex;flex-direction:column;gap:22px;max-height:100vh;overflow:auto}
+.brand{display:flex;gap:12px;align-items:center}
+.brand svg{flex:none}
+.brand b{display:block;font-family:var(--font-display);font-size:1.15rem;color:#fff;line-height:1.1}
+.brand small{display:block;color:var(--ink-muted);font-size:.8rem;line-height:1.3;margin-top:2px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;text-align:left;background:none;border:0;border-radius:6px;padding:10px 12px;color:var(--ink-text);cursor:pointer;font-weight:500}
+.nav button:hover{background:var(--ink-line)}
+.nav button[aria-current="page"]{background:var(--ink-line);color:#fff;font-weight:700}
+.pill{min-width:22px;text-align:center;font-size:.78rem;font-weight:700;border-radius:99px;padding:1px 7px;background:var(--lamp-bad);color:#fff}
+.pill.amber{background:var(--lamp-warn)}
+.lockstate{margin-top:auto;display:flex;gap:8px;align-items:center;color:var(--ink-muted);font-size:.85rem;padding:0 12px}
+.main{padding:28px clamp(16px,3.5vw,44px) 56px;max-width:1180px;width:100%}
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px 20px;margin-bottom:22px}
+.head p{margin:4px 0 0;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+
+/* Boutons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:6px;padding:8px 14px;font-weight:600;cursor:pointer;line-height:1.2}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.quiet{background:none;border-color:transparent;color:var(--accent)}
+.btn.quiet:hover{background:var(--mute-bg)}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn.sm{padding:5px 10px;font-size:.9rem}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* Pastilles de statut */
+.badge{display:inline-block;border-radius:99px;padding:2px 10px;font-size:.85rem;font-weight:600;white-space:nowrap}
+.badge.ok{background:var(--ok-bg);color:var(--ok)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.badge.bad{background:var(--bad-bg);color:var(--bad)}
+.badge.mute{background:var(--mute-bg);color:var(--muted)}
+
+/* Bandeaux */
+.banner{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:10px 14px;margin-bottom:18px;font-weight:500}
+.banner.info{background:var(--mute-bg);color:var(--text)}
+
+/* Voyant du tableau de bord */
+.signal{display:flex;gap:22px;align-items:center;border-radius:14px;padding:22px 26px;margin-bottom:22px}
+.signal.ok{background:var(--ok-bg)} .signal.warn{background:var(--warn-bg)} .signal.bad{background:var(--bad-bg)}
+.lamp{flex:none;width:84px;height:84px;border-radius:22px;display:grid;place-items:center;color:#fff}
+.lamp svg{width:46px;height:46px}
+.signal.ok .lamp{background:var(--lamp-ok)} .signal.warn .lamp{background:var(--lamp-warn)} .signal.bad .lamp{background:var(--lamp-bad)}
+.signal h2{font-size:clamp(1.5rem,3.6vw,2.2rem)}
+.signal p{margin:6px 0 0;max-width:60ch}
+
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:28px}
+.kpi{padding:16px 18px;border-left:1px solid var(--line)}
+.kpi:first-child{border-left:0;padding-left:0}
+.kpi b{display:block;font-family:var(--font-display);font-size:2rem;line-height:1.1}
+.kpi span{color:var(--muted);font-size:.92rem}
+.kpi.bad b{color:var(--bad)} .kpi.ok b{color:var(--ok)}
+
+.cols{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:34px}
+.sect{margin-bottom:30px}
+.sect > h2{margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--text)}
+.list{list-style:none;margin:0;padding:0}
+.list li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.list .t{min-width:0}
+.list .t small{display:block;color:var(--muted)}
+.empty{padding:18px 0;color:var(--muted)}
+
+/* Tableaux */
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th{font-weight:600;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+tr.grp td{background:var(--mute-bg);font-family:var(--font-display);font-weight:700;padding:8px 12px}
+td small{display:block;color:var(--muted)}
+td.act{white-space:nowrap;text-align:right}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:14px}
+.toolbar label{display:grid;gap:3px;font-size:.85rem;color:var(--muted)}
+.foot{margin-top:10px;color:var(--muted);font-size:.92rem}
+
+/* Non-conformités */
+.ncs{display:grid;gap:14px}
+.nc{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px 18px}
+.nc header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;margin-bottom:10px}
+.nc header b{font-family:var(--font-display);font-size:1.1rem}
+.nc dl{display:grid;grid-template-columns:150px 1fr;gap:6px 16px;margin:0}
+.nc dt{color:var(--muted)} .nc dd{margin:0}
+.nc footer{margin-top:12px;display:flex;gap:6px;justify-content:flex-end}
+
+/* Formulaires */
+label{display:grid;gap:4px;font-weight:500}
+input,select,textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+input[type=radio]{width:auto}
+textarea{resize:vertical}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin-bottom:16px}
+.card h3{margin-bottom:8px}
+.stack{display:grid;gap:12px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+fieldset{border:1px solid var(--line);border-radius:6px;padding:6px 12px 10px;margin:0;display:flex;gap:18px;align-items:center}
+legend{font-weight:500;padding:0 4px}
+.rad{display:flex;align-items:center;gap:6px;font-weight:400}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.muted{color:var(--muted)}
+
+/* Fenêtre modale */
+dialog{border:0;border-radius:12px;padding:0;width:min(560px,calc(100% - 24px));background:var(--surface);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(8,20,24,.55)}
+.mform{display:grid}
+.mform header{padding:18px 22px 4px}
+.mbody{padding:10px 22px 4px;display:grid;gap:12px;max-height:68vh;overflow:auto}
+.mform footer{display:flex;justify-content:flex-end;gap:8px;padding:14px 22px 18px}
+.err{margin:0 22px 4px;color:var(--bad);font-weight:600}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:50;display:flex;gap:10px;align-items:center;background:var(--ink);color:#fff;border-radius:10px;padding:10px 14px;box-shadow:0 8px 30px rgba(0,0,0,.35);max-width:calc(100% - 24px)}
+.toast[hidden]{display:none}
+.toast .btn{color:#8FE0EA}
+.hist td:first-child{font-weight:700}
+
+@media (max-width:980px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .kpi{border-left:0;border-top:1px solid var(--line);padding-left:0}
+  .kpi:nth-child(-n+2){border-top:0}
+  .kpi:nth-child(even){padding-left:18px;border-left:1px solid var(--line)}
+  .cols{grid-template-columns:1fr}
+}
+@media (max-width:860px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .main{min-width:0}
+  .side-in{position:sticky;flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 14px;max-height:none}
+  .brand small{display:none}
+  .nav{flex-direction:row;overflow-x:auto;flex:1 1 100%;order:3;gap:4px;padding-bottom:2px}
+  .nav button{white-space:nowrap;width:auto}
+  .lockstate{margin:0 0 0 auto;padding:0}
+  .signal{flex-direction:column;align-items:flex-start}
+  .row2{grid-template-columns:1fr}
+  .nc dl{grid-template-columns:1fr}
+  .nc dt{margin-top:6px}
+  h1{font-size:1.6rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media print{.side,.actions,.toolbar,.btn,.toast{display:none!important}.shell{display:block}.main{max-width:none;padding:0}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<dialog id="dlg"></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<input type="file" id="imp" accept=".json,application/json" hidden>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.12/jspdf.plugin.autotable.min.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ---------- Constantes ---------- */
+const KEY='qc-symbia-x3-v1';
+const MAIN='Symbia Pro.Specta X3';
+const EQUIPS=[MAIN,'Autre'];
+const PERIODS={'Quotidien':1,'Hebdomadaire':7,'Mensuel':30,'Semestriel':182,'Annuel':365,'Selon procédure':0,'Après intervention':0};
+const PERIOD_ORDER=Object.keys(PERIODS);
+const RESULTS=['Conforme','Non conforme','Vert (OK)','Jaune (à surveiller)','Rouge (échec)'];
+const NC_STATUS=['En attente','Efficace - clôturé','Non efficace - à reprendre'];
+const NC_CLOSED='Efficace - clôturé';
+const CONTROLS=[
+ {id:'c1', name:'Température de la salle', part:'Environnement', period:'Quotidien', resp:'Utilisateur / technicien', source:'Siemens IFU X3 – Operating temperature'},
+ {id:'c2', name:'Humidité relative de la salle', part:'Environnement', period:'Quotidien', resp:'Utilisateur / technicien', source:'Siemens IFU X3 – Operating temperature'},
+ {id:'c3', name:'Variation rapide de température', part:'Environnement', period:'Quotidien', resp:'Technicien', source:'Siemens IFU X3 – Temperature Gradient'},
+ {id:'c4', name:'Ventilation de la salle', part:'Environnement', period:'Quotidien', resp:'Utilisateur / technicien', source:'Siemens IFU X3 – ventilation / overheating'},
+ {id:'c5', name:'État des filtres à air', part:'SPECT/CT', period:'Hebdomadaire', resp:'Technicien', source:'Siemens Key Task Guide + IFU'},
+ {id:'c6', name:'Propreté générale du système', part:'SPECT/CT', period:'Hebdomadaire', resp:'Utilisateur / technicien', source:'Siemens IFU – cleaning/maintenance'},
+ {id:'c7', name:'Nettoyage de la table patient', part:'Table', period:'Selon procédure', resp:'Utilisateur / technicien', source:'Siemens IFU / bonnes pratiques d’exploitation'},
+ {id:'c8', name:'État du matelas / coussin de table', part:'Table', period:'Hebdomadaire', resp:'Utilisateur / technicien', source:'Siemens Key Task Guide – patient table/pallet/pad'},
+ {id:'c9', name:'Inspection visuelle des câbles accessibles', part:'Système', period:'Hebdomadaire', resp:'Technicien', source:'Siemens IFU – routine checks / maintenance'},
+ {id:'c10', name:'État des connecteurs accessibles', part:'Système', period:'Hebdomadaire', resp:'Technicien', source:'Siemens IFU – maintenance'},
+ {id:'c11', name:'Mise sous tension et démarrage', part:'SPECT/CT', period:'Quotidien', resp:'Utilisateur', source:'Siemens Key Task Guide – startup/System Check'},
+ {id:'c12', name:'Redémarrage contrôlé du système', part:'SPECT/CT', period:'Quotidien', resp:'Utilisateur autorisé', source:'Siemens Key Task Guide – daily shutdown/startup'},
+ {id:'c13', name:'System Check', part:'SPECT/CT', period:'Quotidien', resp:'Utilisateur autorisé', source:'Siemens Key Task Guide / Daily QA'},
+ {id:'c14', name:'Vérification des messages d’erreur', part:'Console', period:'Quotidien', resp:'Utilisateur / technicien', source:'Siemens System Check / service reports'},
+ {id:'c15', name:'CT Checkup', part:'CT', period:'Quotidien', resp:'Utilisateur autorisé', source:'Siemens Daily Quality Assurance'},
+ {id:'c16', name:'CT Quality / Daily QA', part:'CT', period:'Quotidien', resp:'Utilisateur autorisé', source:'Siemens Daily Quality Assurance'},
+ {id:'c17', name:'CT Calibration', part:'CT', period:'Selon procédure', resp:'Utilisateur autorisé', source:'Siemens Daily Quality Assurance'},
+ {id:'c18', name:'CT Constancy Test', part:'CT', period:'Mensuel', resp:'Utilisateur autorisé / technicien formé', source:'Siemens QC & Assurance'},
+ {id:'c19', name:'Intrisic/Extrinsic Verification', part:'SPECT', period:'Quotidien', resp:'Personnel autorisé formé', source:'Siemens QC Schedule'},
+ {id:'c20', name:'Peaking Verification', part:'SPECT', period:'Quotidien', resp:'Personnel autorisé formé', source:'Siemens QC & Assurance'},
+ {id:'c21', name:'Tuning', part:'SPECT', period:'Hebdomadaire', resp:'Personnel autorisé formé', source:'Siemens QC Schedule'},
+ {id:'c22', name:'État visuel des détecteurs', part:'SPECT', period:'Hebdomadaire', resp:'Technicien / utilisateur', source:'Siemens Key Task Guide / IFU'},
+ {id:'c23', name:'Mouvement des détecteurs', part:'SPECT', period:'Hebdomadaire', resp:'Technicien / utilisateur formé', source:'Siemens Key Task Guide – NM detectors'},
+ {id:'c24', name:'Positionnement des détecteurs', part:'SPECT', period:'Hebdomadaire', resp:'Utilisateur formé', source:'Siemens Key Task Guide – detector motion'},
+ {id:'c25', name:'État visuel des collimateurs', part:'SPECT', period:'Hebdomadaire', resp:'Technicien / utilisateur formé', source:'Siemens QC Schedule – extrinsic calibration if collimator damage suspected'},
+ {id:'c26', name:'Fixation / mise en place du collimateur', part:'SPECT', period:'Selon procédure', resp:'Utilisateur formé / technicien', source:'Siemens Collimator Change / Key Task Guide'},
+ {id:'c27', name:'État du support/chariot de collimateur', part:'SPECT', period:'Hebdomadaire', resp:'Technicien', source:'Siemens Key Task Guide – collimator cart'},
+ {id:'c28', name:'Fonctionnement des lasers de positionnement', part:'SPECT/CT', period:'Quotidien', resp:'Utilisateur', source:'Siemens Key Task Guide – laser light markers'},
+ {id:'c29', name:'Positionnement de la table patient', part:'SPECT/CT', period:'Quotidien', resp:'Utilisateur', source:'Siemens Key Task Guide – patient table'},
+ {id:'c30', name:'Mouvement du plateau patient', part:'Table', period:'Quotidien', resp:'Utilisateur', source:'Siemens Key Task Guide – pallet'},
+ {id:'c31', name:'Pédale / commande de table', part:'Table', period:'Hebdomadaire', resp:'Technicien / utilisateur formé', source:'Siemens Key Task Guide – foot pedal'},
+ {id:'c32', name:'Système d’arrêt d’urgence', part:'Sécurité', period:'Selon procédure', resp:'Technicien / personnel autorisé', source:'Siemens Key Task Guide – Emergency Stop Buttons'},
+ {id:'c33', name:'Interphone', part:'Sécurité / patient', period:'Quotidien', resp:'Utilisateur', source:'Siemens Key Task Guide – intercom system'},
+ {id:'c34', name:'Signaux / avertissements visibles', part:'Sécurité', period:'Hebdomadaire', resp:'Technicien / utilisateur', source:'Siemens IFU – safety information / labels'},
+ {id:'c35', name:'Éclairage et visibilité de la zone d’examen', part:'Salle', period:'Quotidien', resp:'Utilisateur', source:'Bonne pratique d’exploitation / sécurité du site'},
+ {id:'c36', name:'Accès et dégagement autour du gantry', part:'Salle / gantry', period:'Hebdomadaire', resp:'Technicien', source:'Siemens IFU – ventilation and system operation'},
+ {id:'c37', name:'État de l’écran/console d’acquisition', part:'Console', period:'Quotidien', resp:'Utilisateur', source:'Siemens Key Task Guide – acquisition console'},
+ {id:'c38', name:'Clavier/souris et commandes utilisateur', part:'Console', period:'Hebdomadaire', resp:'Utilisateur / technicien', source:'Contrôle fonctionnel utilisateur'},
+ {id:'c39', name:'Archivage des rapports QC', part:'Système / informatique', period:'Selon procédure', resp:'Utilisateur / technicien', source:'Siemens QC & Assurance – Service Reports'},
+ {id:'c40', name:'Traçabilité des anomalies et actions correctives', part:'Gestion qualité', period:'Selon procédure', resp:'Technicien / responsable désigné', source:'IAEA – quality control records / Siemens system owner responsibilities'},
+];
+
+/* ---------- Utilitaires ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today=()=>iso(new Date());
+const P=s=>{const a=s.split('-').map(Number);return new Date(a[0],a[1]-1,a[2],12)};
+const addDays=(s,n)=>{const d=P(s);d.setDate(d.getDate()+n);return iso(d)};
+const fmt=s=>s?s.split('-').reverse().join('/'):'—';
+const dayDiff=(a,b)=>Math.round((P(a)-P(b))/86400000);
+const uid=()=>'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const plural=(n,a,b)=>n>1?b:a;
+const pct=n=>String(n).replace('.',',')+' %';
+const shortName=s=>s.length>46?s.slice(0,44)+'…':s;
+
+/* ---------- Données ---------- */
+let memOnly=false;
+const blank=()=>({v:1,tech:'',pin:null,demo:false,custom:[],register:[],ncs:[],nextNc:1});
+function load(){
+  try{
+    localStorage.setItem(KEY+'-t','1');localStorage.removeItem(KEY+'-t');
+    const raw=localStorage.getItem(KEY);
+    if(raw){return Object.assign(blank(),JSON.parse(raw));}
+  }catch(e){memOnly=true;}
+  return blank();
+}
+let state=load();
+let locked=!!state.pin;
+let view='dash';
+let DL=null;
+let pendingNC=null;
+const filt={equip:'',ok:'',q:'',nc:'open'};
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){memOnly=true;}
+}
+const controls=()=>CONTROLS.concat(state.custom);
+const ctl=id=>controls().find(c=>c.id===id);
+
+function lastDone(id){
+  let m='';
+  for(const r of state.register){if(r.cid===id&&r.equip===MAIN&&r.date>m)m=r.date;}
+  return m;
+}
+function status(c){
+  const n=PERIODS[c.period];
+  const last=lastDone(c.id);
+  if(n===0)return {k:'demand',label:'Sur intervention',cls:'mute',rank:9,last:last,next:'',detail:'Sur intervention'};
+  if(!last)return {k:'never',label:'À réaliser',cls:'warn',rank:2,last:'',next:'',detail:'Jamais enregistré'};
+  const next=addDays(last,n),t=today();
+  if(t>next){const d=dayDiff(t,next);return {k:'late',label:'En retard',cls:'bad',rank:0,last:last,next:next,late:d,detail:'En retard de '+d+' jour'+plural(d,'','s')};}
+  if(t===next)return {k:'due',label:'À faire aujourd’hui',cls:'warn',rank:1,last:last,next:next,detail:'À faire aujourd’hui'};
+  return {k:'ok',label:'À jour',cls:'ok',rank:5,last:last,next:next,detail:''};
+}
+function summary(){
+  const cs=controls().map(c=>({c:c,s:status(c)}));
+  const cnt=k=>cs.filter(x=>x.s.k===k).length;
+  const reg=state.register;
+  const okN=reg.filter(r=>r.ok==='Oui').length;
+  return {
+    cs:cs, late:cnt('late'), due:cnt('due'), never:cnt('never'), ok:cnt('ok'),
+    total:cs.filter(x=>x.s.k!=='demand').length,
+    n:reg.length, rate:reg.length?Math.round(okN*1000/reg.length)/10:null,
+    openNc:state.ncs.filter(n=>n.status!==NC_CLOSED).length,
+    todo:cs.filter(x=>x.s.k==='late'||x.s.k==='due'||x.s.k==='never').sort((a,b)=>a.s.rank-b.s.rank||(b.s.late||0)-(a.s.late||0))
+  };
+}
+
+/* ---------- Interface : outils ---------- */
+let tt;
+function toast(msg,label,fn){
+  const t=$('#toast');
+  t.innerHTML='<span>'+esc(msg)+'</span>'+(label?'<button type="button" class="btn quiet sm">'+esc(label)+'</button>':'');
+  t.hidden=false;
+  if(label){$('button',t).onclick=function(){fn();t.hidden=true;};}
+  clearTimeout(tt);tt=setTimeout(function(){t.hidden=true;},7000);
+}
+const dlg=$('#dlg');
+function openModal(o){
+  dlg.innerHTML='<form method="dialog" class="mform" novalidate><header><h2>'+esc(o.title)+'</h2></header>'+
+    '<div class="mbody">'+o.body+'</div><p class="err" id="merr" role="alert" hidden></p>'+
+    '<footer><button type="button" class="btn quiet" data-close>Annuler</button>'+
+    '<button type="submit" class="btn '+(o.danger?'danger':'primary')+'">'+esc(o.submit||'Enregistrer')+'</button></footer></form>';
+  const f=$('form',dlg);
+  f.onsubmit=async function(ev){
+    ev.preventDefault();
+    const data=Object.fromEntries(new FormData(f).entries());
+    const r=await o.onSubmit(data);
+    if(r&&r.error){const e=$('#merr',dlg);e.textContent=r.error;e.hidden=false;return;}
+    dlg.close();
+  };
+  $('[data-close]',dlg).onclick=function(){dlg.close();};
+  dlg.showModal();
+  if(o.onOpen)o.onOpen(f);
+}
+dlg.addEventListener('close',function(){
+  if(pendingNC){const p=pendingNC;pendingNC=null;openNC(p);}
+});
+function askConfirm(title,text,ok,danger){
+  return new Promise(function(res){
+    let done=false;
+    openModal({title:title,body:'<p>'+esc(text)+'</p>',submit:ok||'Confirmer',danger:danger,onSubmit:function(){done=true;res(true);}});
+    dlg.addEventListener('close',function(){if(!done)res(false);},{once:true});
+  });
+}
+function guard(){
+  if(locked){toast('Mode lecture : déverrouillez l’application pour modifier.');return false;}
+  return true;
+}
+async function hashPin(p){
+  try{
+    if(window.crypto&&crypto.subtle){
+      const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('qc:'+p));
+      return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
+    }
+  }catch(e){}
+  let h=5381;const s='qc:'+p;for(let i=0;i<s.length;i++){h=((h<<5)+h+s.charCodeAt(i))|0;}
+  return 'x'+h;
+}
+
+/* ---------- Rendu ---------- */
+const GLYPH={
+  ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>',
+  warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5.5v8.5"/><circle cx="12" cy="18.6" r=".6" fill="currentColor"/></svg>',
+  bad:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+};
+const BRAND='<svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="8" fill="#25436B"/><path d="M18 8l9 4v6.2c0 6.1-3.8 10.4-9 11.8-5.2-1.4-9-5.7-9-11.8V12z" fill="none" stroke="#EEF1F4" stroke-width="1.8" stroke-linejoin="round"/><path d="M13.6 18.3l3.1 3.1 5.7-6.3" fill="none" stroke="#EEF1F4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function render(){
+  const s=summary();
+  const nav=[['dash','Tableau de bord',0],['cal','Calendrier',s.late],['reg','Registre',0],['nc','Non-conformités',s.openNc],['set','Réglages et aide',0]];
+  $('#app').innerHTML=
+   '<div class="shell"><aside class="side"><div class="side-in">'+
+   '<div class="brand">'+BRAND+'<div><b>Vigie Biomédicale</b><small>Symbia Pro.Specta X3<br>Hôpital Dogta-Lafiè, Lomé</small></div></div>'+
+   '<nav class="nav" aria-label="Sections">'+nav.map(function(n){
+      return '<button type="button" data-nav="'+n[0]+'"'+(view===n[0]?' aria-current="page"':'')+'>'+n[1]+(n[2]?'<span class="pill'+(n[0]==='nc'?' amber':'')+'">'+n[2]+'</span>':'')+'</button>';
+   }).join('')+'</nav>'+
+   '<p class="lockstate">'+(state.pin?(locked?'🔒 Verrouillé':'🔓 Déverrouillé'):'Non protégé')+'</p>'+
+   '</div></aside><main class="main" id="main">'+banners()+
+   (view==='dash'?vDash(s):view==='cal'?vCal(s):view==='reg'?vReg():view==='nc'?vNC():vSet())+
+   '</main></div>';
+  if(view==='reg')renderRegTable();
+}
+function banners(){
+  let h='';
+  if(memOnly)h+='<div class="banner"><span>Le stockage du navigateur est indisponible : les données seront perdues à la fermeture. Exportez régulièrement une sauvegarde (Réglages et aide).</span></div>';
+  if(state.demo)h+='<div class="banner info"><span>Données de démonstration affichées. Effacez-les avant l’usage réel.</span><button type="button" class="btn sm" data-act="clear">Effacer les données</button></div>';
+  if(locked)h+='<div class="banner info"><span>Mode lecture : seul le technicien qui connaît le code peut modifier les données. Déverrouillage dans Réglages et aide.</span></div>';
+  return h;
+}
+const dis=()=>locked?' disabled':'';
+
+function vDash(s){
+  let cls,head,sub;
+  if(s.late>0){
+    cls='bad';head=s.late+' contrôle'+plural(s.late,'','s')+' en retard';
+    const w=s.todo[0];sub='Le plus en retard : '+w.c.name+' (échéance le '+fmt(w.s.next)+').';
+  }else if(s.due+s.never>0){
+    cls='warn';const n=s.due+s.never;head=n+' contrôle'+plural(n,'','s')+' à réaliser';
+    if(s.never===s.total)sub='Aucun contrôle n’a encore été enregistré. Commencez par le System Check du jour.';
+    else{const p=[];if(s.due)p.push(s.due+' à faire aujourd’hui');if(s.never)p.push(s.never+' jamais enregistré'+plural(s.never,'','s'));sub=p.join(', ')+'.';}
+  }else{
+    cls='ok';head='Tous les contrôles sont à jour';sub='Aucun contrôle n’est en retard.';
+  }
+  if(s.openNc)sub+=' '+s.openNc+' non-conformité'+plural(s.openNc,'','s')+' ouverte'+plural(s.openNc,'','s')+'.';
+  const dateLong=new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
+  const todo=s.todo.slice(0,6);
+  const last=state.register.slice().sort(function(a,b){return b.date.localeCompare(a.date);}).slice(0,6);
+  return '<div class="head"><div><h1>Tableau de bord</h1><p>'+esc(dateLong.charAt(0).toUpperCase()+dateLong.slice(1))+'</p></div>'+
+    '<div class="actions"><button type="button" class="btn primary" data-act="newlog"'+dis()+'>Enregistrer un contrôle</button>'+
+    '<button type="button" class="btn" data-act="exp-report">Exporter en PDF</button></div></div>'+
+    '<section class="signal '+cls+'" aria-live="polite"><div class="lamp">'+GLYPH[cls]+'</div><div><h2>'+esc(head)+'</h2><p>'+esc(sub)+'</p></div></section>'+
+    '<div class="kpis">'+
+      '<div class="kpi'+(s.late?' bad':'')+'"><b>'+s.late+'</b><span>Contrôles en retard</span></div>'+
+      '<div class="kpi ok"><b>'+s.ok+'</b><span>Contrôles à jour</span></div>'+
+      '<div class="kpi"><b>'+(s.due+s.never)+'</b><span>À réaliser</span></div>'+
+      '<div class="kpi"><b>'+(s.rate===null?'—':pct(s.rate))+'</b><span>Taux de conformité ('+s.n+' contrôle'+plural(s.n,'','s')+')</span></div>'+
+      '<div class="kpi'+(s.openNc?' bad':'')+'"><b>'+s.openNc+'</b><span>Non-conformités ouvertes</span></div>'+
+    '</div>'+
+    '<div class="cols"><section class="sect"><h2>À faire en priorité</h2>'+
+    (todo.length?'<ul class="list">'+todo.map(function(x){
+      return '<li><div class="t">'+esc(x.c.name)+'<small><span class="badge '+x.s.cls+'">'+esc(x.s.detail)+'</span> '+esc(x.c.period)+'</small></div>'+
+        '<button type="button" class="btn sm primary" data-act="quick" data-id="'+x.c.id+'"'+dis()+'>Fait ✓</button></li>';
+    }).join('')+'</ul>'+(s.todo.length>6?'<p class="foot">Et '+(s.todo.length-6)+' autre'+plural(s.todo.length-6,'','s')+' dans le calendrier.</p>':''):
+    '<p class="empty">Rien à faire pour le moment.</p>')+
+    '<p><button type="button" class="btn quiet" data-nav="cal">Voir tout le calendrier</button></p></section>'+
+    '<section class="sect"><h2>Derniers contrôles</h2>'+
+    (last.length?'<ul class="list">'+last.map(function(r){
+      return '<li><div class="t">'+esc(shortName(r.test))+'<small>'+fmt(r.date)+', '+esc(r.equip)+'</small></div><span class="badge '+(r.ok==='Oui'?'ok':'bad')+'">'+(r.ok==='Oui'?'Conforme':'Non conforme')+'</span></li>';
+    }).join('')+'</ul>':'<p class="empty">Aucun contrôle enregistré. Cliquez sur « Fait ✓ » après chaque contrôle, ou sur « Enregistrer un contrôle ».</p>')+
+    '</section></div>';
+}
+
+function vCal(s){
+  let rows='';
+  PERIOD_ORDER.forEach(function(p){
+    const items=s.cs.filter(function(x){return x.c.period===p;});
+    if(!items.length)return;
+    rows+='<tr class="grp"><td colspan="5">'+esc(p)+'</td></tr>';
+    items.forEach(function(x){
+      const custom=x.c.id.charAt(0)==='u';
+      rows+='<tr><td>'+esc(x.c.name)+'<small>'+esc(x.c.part)+' · '+esc(x.c.resp)+'<br>'+esc(x.c.source)+'</small></td><td>'+fmt(x.s.last)+'</td><td>'+(x.s.k==='demand'?'—':fmt(x.s.next))+'</td>'+
+        '<td><span class="badge '+x.s.cls+'">'+esc(x.s.k==='late'?x.s.detail:x.s.label)+'</span></td>'+
+        '<td class="act"><button type="button" class="btn sm primary" data-act="quick" data-id="'+x.c.id+'"'+dis()+'>Fait ✓</button> '+
+        '<button type="button" class="btn sm" data-act="log" data-id="'+x.c.id+'"'+dis()+'>Détails</button>'+
+        (custom?' <button type="button" class="btn sm quiet" data-act="delctl" data-id="'+x.c.id+'"'+dis()+'>Supprimer</button>':'')+'</td></tr>';
+    });
+  });
+  return '<div class="head"><div><h1>Calendrier de contrôle</h1><p>La prochaine échéance se calcule à partir du dernier contrôle enregistré.</p></div>'+
+    '<div class="actions"><button type="button" class="btn" data-act="addctl"'+dis()+'>Ajouter un contrôle</button>'+
+    '<button type="button" class="btn" data-act="exp-cal">Exporter en CSV</button></div></div>'+
+    '<div class="scroll"><table><thead><tr><th>Contrôle</th><th>Dernière réalisation</th><th>Prochaine échéance</th><th>Statut</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<p class="foot">« Fait ✓ » enregistre le contrôle du jour comme conforme. Utilisez « Détails » pour indiquer un autre résultat ou une observation.</p>';
+}
+
+function vReg(){
+  return '<div class="head"><div><h1>Registre de contrôle qualité</h1><p>Une ligne par contrôle réalisé.</p></div>'+
+    '<div class="actions"><button type="button" class="btn primary" data-act="newlog"'+dis()+'>Nouveau contrôle</button>'+
+    '<button type="button" class="btn" data-act="exp-reg">Exporter en CSV</button></div></div>'+
+    '<div class="toolbar"><label>Équipement<select data-f="equip"><option value="">Tous</option>'+equipNames().map(function(e){return '<option'+(filt.equip===e?' selected':'')+'>'+esc(e)+'</option>';}).join('')+'</select></label>'+
+    '<label>Conforme<select data-f="ok"><option value="">Tous</option><option value="Oui"'+(filt.ok==='Oui'?' selected':'')+'>Oui</option><option value="Non"'+(filt.ok==='Non'?' selected':'')+'>Non</option></select></label>'+
+    '<label>Recherche<input type="search" data-f="q" placeholder="Test, technicien, observation" value="'+esc(filt.q)+'"></label></div>'+
+    '<div id="regtable"></div>';
+}
+function renderRegTable(){
+  const q=filt.q.trim().toLowerCase();
+  const list=state.register.filter(function(r){
+    return (!filt.equip||r.equip===filt.equip)&&(!filt.ok||r.ok===filt.ok)&&(!q||(r.test+' '+r.tech+' '+r.note).toLowerCase().indexOf(q)>=0);
+  }).sort(function(a,b){return b.date.localeCompare(a.date);});
+  const okN=list.filter(function(r){return r.ok==='Oui';}).length;
+  const box=$('#regtable');if(!box)return;
+  if(!state.register.length){box.innerHTML='<p class="empty">Aucun contrôle enregistré. Cliquez sur « Nouveau contrôle », ou sur « Fait ✓ » dans le calendrier.</p>';return;}
+  if(!list.length){box.innerHTML='<p class="empty">Aucun enregistrement ne correspond à ces filtres.</p>';return;}
+  box.innerHTML='<div class="scroll"><table><thead><tr><th>Date</th><th>Équipement</th><th>Type</th><th>Test réalisé</th><th>Résultat</th><th>Conforme</th><th>Technicien</th><th>Observation</th><th></th></tr></thead><tbody>'+
+   list.map(function(r){
+     return '<tr><td>'+fmt(r.date)+'</td><td>'+esc(r.equip)+'</td><td>'+esc(r.type)+'</td><td>'+esc(r.test)+'</td><td>'+esc(r.result)+'</td>'+
+      '<td><span class="badge '+(r.ok==='Oui'?'ok':'bad')+'">'+esc(r.ok)+'</span></td><td>'+esc(r.tech)+'</td><td>'+esc(r.note)+'</td>'+
+      '<td class="act"><button type="button" class="btn sm" data-act="editlog" data-id="'+r.id+'"'+dis()+'>Modifier</button> <button type="button" class="btn sm quiet" data-act="dellog" data-id="'+r.id+'"'+dis()+'>Supprimer</button></td></tr>';
+   }).join('')+'</tbody></table></div>'+
+   '<p class="foot">'+list.length+' enregistrement'+plural(list.length,'','s')+', taux de conformité '+pct(Math.round(okN*1000/list.length)/10)+'.</p>';
+}
+
+function vNC(){
+  const list=state.ncs.filter(function(n){
+    return filt.nc==='all'||(filt.nc==='open'&&n.status!==NC_CLOSED)||(filt.nc==='closed'&&n.status===NC_CLOSED);
+  }).sort(function(a,b){return b.num-a.num;});
+  const cls=function(s){return s===NC_CLOSED?'ok':s==='En attente'?'warn':'bad';};
+  return '<div class="head"><div><h1>Non-conformités</h1><p>À ouvrir dès qu’un contrôle échoue, jusqu’à vérification de l’efficacité de l’action corrective.</p></div>'+
+    '<div class="actions"><button type="button" class="btn primary" data-act="newnc"'+dis()+'>Nouvelle non-conformité</button>'+
+    '<button type="button" class="btn" data-act="exp-nc">Exporter en CSV</button></div></div>'+
+    '<div class="toolbar"><label>Afficher<select data-f="nc"><option value="open"'+(filt.nc==='open'?' selected':'')+'>Ouvertes</option><option value="closed"'+(filt.nc==='closed'?' selected':'')+'>Clôturées</option><option value="all"'+(filt.nc==='all'?' selected':'')+'>Toutes</option></select></label></div>'+
+    (list.length?'<div class="ncs">'+list.map(function(n){
+      return '<article class="nc"><header><b>NC-'+pad(n.num).padStart(3,'0')+'</b><span class="badge '+cls(n.status)+'">'+esc(n.status)+'</span></header><dl>'+
+       '<dt>Équipement</dt><dd>'+esc(n.equip)+'</dd><dt>Date</dt><dd>'+fmt(n.date)+'</dd><dt>Contrôle à l’origine</dt><dd>'+esc(n.origin||'—')+'</dd>'+
+       '<dt>Écart constaté</dt><dd>'+esc(n.desc)+'</dd><dt>Cause probable</dt><dd>'+esc(n.cause||'—')+'</dd><dt>Action corrective</dt><dd>'+esc(n.action||'—')+'</dd>'+
+       '<dt>Délai</dt><dd>'+fmt(n.due)+'</dd><dt>Responsable</dt><dd>'+esc(n.resp||'—')+'</dd></dl>'+
+       '<footer><button type="button" class="btn sm" data-act="editnc" data-id="'+n.id+'"'+dis()+'>Modifier</button><button type="button" class="btn sm quiet" data-act="delnc" data-id="'+n.id+'"'+dis()+'>Supprimer</button></footer></article>';
+    }).join('')+'</div>':'<p class="empty">'+(state.ncs.length?'Aucune non-conformité dans cette vue.':'Aucune non-conformité enregistrée. Une non-conformité s’ouvre automatiquement quand un contrôle est marqué « Non conforme ».')+'</p>');
+}
+
+function vSet(){
+  return '<div class="head"><div><h1>Réglages et aide</h1><p>Paramètres, sauvegardes et informations sur le programme.</p></div></div>'+
+   '<div class="cols"><div>'+
+   '<section class="card"><h3>Technicien</h3><label>Nom utilisé par défaut dans le registre<input id="techname" value="'+esc(state.tech)+'" placeholder="Prénom Nom"'+dis()+'></label></section>'+
+   '<section class="card"><h3>Verrouillage</h3><p class="muted">Le code empêche les modifications accidentelles : l’application s’ouvre en lecture seule. Ce n’est pas un chiffrement des données.</p>'+
+   '<div class="btns">'+
+    (locked?'<button type="button" class="btn primary" data-act="unlock">Déverrouiller</button>':
+     state.pin?'<button type="button" class="btn" data-act="lock">Verrouiller maintenant</button><button type="button" class="btn" data-act="setpin">Changer le code</button><button type="button" class="btn" data-act="rmpin">Retirer le code</button>':
+     '<button type="button" class="btn primary" data-act="setpin">Définir un code</button>')+
+   '</div></section>'+
+   '<section class="card"><h3>Sauvegarde et exports</h3><p class="muted">Les données sont conservées dans ce navigateur, sur cet ordinateur. Faites une sauvegarde régulière.</p>'+
+   '<div class="btns"><button type="button" class="btn primary" data-act="exp-json">Télécharger une sauvegarde</button><button type="button" class="btn" data-act="import"'+dis()+'>Restaurer une sauvegarde</button>'+
+   '<button type="button" class="btn" data-act="exp-report">Rapport PDF</button></div></section>'+
+   '<section class="card"><h3>Données de démonstration</h3><p class="muted">Pour présenter l’outil sans saisir de vraies données.</p>'+
+   '<div class="btns"><button type="button" class="btn" data-act="demo"'+dis()+'>Charger la démonstration</button><button type="button" class="btn" data-act="clear"'+dis()+'>Tout effacer</button></div></section>'+
+   '</div><div>'+
+   '<section class="card"><h3>Comment l’utiliser</h3><ol><li>Chaque jour, ouvrez le tableau de bord : les contrôles à faire y sont listés.</li><li>Après un contrôle, cliquez sur « Fait ✓ ». Si le résultat n’est pas conforme, utilisez « Détails ».</li><li>Une non-conformité s’ouvre alors ; complétez la cause et l’action corrective, puis clôturez-la une fois l’efficacité vérifiée.</li></ol></section>'+
+   '<section class="card"><h3>Sources du programme</h3><ul><li>Siemens Healthineers, <i>Symbia Pro.specta X3 — Key Task Guide</i> et <i>Instructions for Use</i>, VA10x.</li><li>IEC 62353:2014, <i>Medical electrical equipment — Recurrent test and test after repair of medical electrical equipment</i>.</li><li>IAEA — enregistrements de contrôle qualité et responsabilités du propriétaire du système.</li></ul>'+
+   '<p class="muted">40 contrôles répartis entre utilisateur et technicien selon qui peut les réaliser. Les mesures de qualité d’image poussées (CT Constancy Test notamment) restent encadrées par la procédure du système.</p></section>'+
+   '</div></div>';
+}
+
+/* ---------- Formulaires ---------- */
+function opts(list,cur){return list.map(function(v){return '<option'+(v===cur?' selected':'')+'>'+esc(v)+'</option>';}).join('');}
+function equipField(fid,current){
+  const known=EQUIPS.slice(0,-1).indexOf(current)>=0;
+  const sel=known?current:(current?'Autre':MAIN);
+  const otherVal=known?'':current;
+  return '<label>Équipement<select name="equip" id="'+fid+'">'+opts(EQUIPS,sel)+'</select></label>'+
+   '<label id="'+fid+'-w"'+(sel==='Autre'?'':' hidden')+'>Préciser l’équipement<input name="equipOther" value="'+esc(otherVal)+'"></label>';
+}
+function wireEquipField(f,fid){
+  const sel=f.querySelector('#'+fid),w=f.querySelector('#'+fid+'-w');
+  if(!sel)return;
+  sel.onchange=function(){w.hidden=sel.value!=='Autre';if(!w.hidden)w.querySelector('input').focus();};
+}
+function equipValue(d){return d.equip==='Autre'?(d.equipOther||'').trim():d.equip;}
+function equipNames(){
+  const s=new Set(EQUIPS.slice(0,-1));
+  state.register.forEach(function(r){if(r.equip)s.add(r.equip);});
+  state.ncs.forEach(function(n){if(n.equip)s.add(n.equip);});
+  return Array.from(s);
+}
+
+function openLog(e){
+  if(!guard())return;
+  const cs=controls();
+  const cid=e.cid!==undefined?e.cid:cs[0].id;
+  const base=Object.assign({date:today(),equip:MAIN,type:'Quotidien',result:'Conforme',ok:'Oui',tech:state.tech,note:'',test:''},e);
+  const c0=cid?ctl(cid):null;
+  if(c0&&!e.id)base.type=c0.period;
+  openModal({
+    title:e.id?'Modifier le contrôle':'Enregistrer un contrôle',
+    body:'<label>Contrôle<select name="cid" id="f-cid">'+cs.map(function(c){return '<option value="'+c.id+'"'+(c.id===cid?' selected':'')+'>'+esc(c.name)+'</option>';}).join('')+'<option value=""'+(cid===''?' selected':'')+'>Autre contrôle…</option></select></label>'+
+     '<label id="f-test-w" hidden>Nom du contrôle<input name="test" value="'+esc(base.test)+'"></label>'+
+     '<div class="row2"><label>Date<input type="date" name="date" value="'+esc(base.date)+'" required></label><label>Type<select name="type" id="f-type">'+opts(PERIOD_ORDER,base.type)+'</select></label></div>'+
+     '<div class="row2">'+equipField('f-equip',base.equip)+'</div>'+
+     '<label>Résultat<select name="result" id="f-res">'+opts(RESULTS,base.result)+'</select></label>'+
+     '<fieldset><legend>Conforme</legend><label class="rad"><input type="radio" name="ok" value="Oui"'+(base.ok==='Oui'?' checked':'')+'> Oui</label><label class="rad"><input type="radio" name="ok" value="Non"'+(base.ok==='Non'?' checked':'')+'> Non</label></fieldset>'+
+     '<label>Technicien<input name="tech" value="'+esc(base.tech)+'"></label>'+
+     '<label>Observation<textarea name="note" rows="2">'+esc(base.note)+'</textarea></label>',
+    onOpen:function(f){
+      const sel=$('#f-cid',f),w=$('#f-test-w',f);
+      const sync=function(){w.hidden=sel.value!=='';};
+      sel.onchange=function(){sync();const c=ctl(sel.value);if(c)$('#f-type',f).value=c.period;};
+      $('#f-res',f).onchange=function(ev){const bad=/Non conforme|Rouge/.test(ev.target.value);f.elements.ok.value=bad?'Non':'Oui';};
+      wireEquipField(f,'f-equip');
+      sync();
+    },
+    onSubmit:function(d){
+      if(!d.date)return {error:'Indiquez la date du contrôle.'};
+      const c=d.cid?ctl(d.cid):null;
+      const test=c?c.name:(d.test||'').trim();
+      if(!test)return {error:'Indiquez le nom du contrôle.'};
+      const equip=equipValue(d);
+      if(!equip)return {error:'Précisez le nom de l’équipement.'};
+      const tech=(d.tech||'').trim();
+      if(!tech)return {error:'Indiquez le nom du technicien : l’enregistrement ne peut pas être anonyme.'};
+      const rec={id:e.id||uid(),date:d.date,equip:equip,type:d.type,cid:c?c.id:'',test:test,result:d.result,ok:d.ok||'Oui',tech:tech,note:(d.note||'').trim()};
+      if(e.id)state.register=state.register.map(function(x){return x.id===e.id?rec:x;});else state.register.push(rec);
+      if(rec.tech&&!state.tech)state.tech=rec.tech;
+      save();render();
+      if(rec.ok==='Non'&&!e.id)pendingNC={equip:rec.equip,date:rec.date,origin:rec.test,desc:rec.note,resp:rec.tech};
+      return {};
+    }
+  });
+}
+
+function openNC(e){
+  if(!guard())return;
+  const b=Object.assign({equip:MAIN,date:today(),origin:'',desc:'',cause:'',action:'',due:'',status:'En attente',resp:state.tech},e);
+  openModal({
+    title:e.id?'Modifier la non-conformité':'Nouvelle non-conformité',
+    body:'<div class="row2">'+equipField('f-ncequip',b.equip)+'</div>'+
+     '<label>Date<input type="date" name="date" value="'+esc(b.date)+'" required></label>'+
+     '<label>Contrôle à l’origine<input name="origin" list="ctls" value="'+esc(b.origin)+'"><datalist id="ctls">'+controls().map(function(c){return '<option value="'+esc(c.name)+'">';}).join('')+'</datalist></label>'+
+     '<label>Description de l’écart<textarea name="desc" rows="2" required>'+esc(b.desc)+'</textarea></label>'+
+     '<label>Cause probable<textarea name="cause" rows="2">'+esc(b.cause)+'</textarea></label>'+
+     '<label>Action corrective<textarea name="action" rows="2">'+esc(b.action)+'</textarea></label>'+
+     '<div class="row2"><label>Délai<input type="date" name="due" value="'+esc(b.due)+'"></label><label>Vérification de l’efficacité<select name="status">'+opts(NC_STATUS,b.status)+'</select></label></div>'+
+     '<label>Responsable<input name="resp" value="'+esc(b.resp)+'"></label>',
+    onOpen:function(f){wireEquipField(f,'f-ncequip');},
+    onSubmit:function(d){
+      if(!d.date)return {error:'Indiquez la date.'};
+      if(!(d.desc||'').trim())return {error:'Décrivez l’écart constaté.'};
+      const equip=equipValue(d);
+      if(!equip)return {error:'Précisez le nom de l’équipement.'};
+      const rec={id:e.id||uid(),num:e.num||state.nextNc,equip:equip,date:d.date,origin:(d.origin||'').trim(),desc:d.desc.trim(),cause:(d.cause||'').trim(),action:(d.action||'').trim(),due:d.due||'',status:d.status,resp:(d.resp||'').trim()};
+      if(e.id)state.ncs=state.ncs.map(function(x){return x.id===e.id?rec:x;});else{state.ncs.push(rec);state.nextNc=rec.num+1;}
+      save();view='nc';render();return {};
+    }
+  });
+}
+
+function openCtl(){
+  if(!guard())return;
+  openModal({
+    title:'Ajouter un contrôle au calendrier',
+    body:'<label>Nom du contrôle<input name="name" required></label><label>Source<input name="source" placeholder="Constructeur, norme, procédure du service…"></label><label>Périodicité<select name="period">'+opts(PERIOD_ORDER,'Mensuel')+'</select></label>',
+    onSubmit:function(d){
+      if(!(d.name||'').trim())return {error:'Indiquez le nom du contrôle.'};
+      state.custom.push({id:'u'+uid(),name:d.name.trim(),source:(d.source||'Procédure du service').trim(),period:d.period});
+      save();render();return {};
+    }
+  });
+}
+
+function quickLog(id){
+  if(!guard())return;
+  const c=ctl(id);if(!c)return;
+  if(!(state.tech||'').trim()){openLog({cid:id});toast('Indiquez le nom du technicien pour enregistrer ce contrôle.');return;}
+  const e={id:uid(),date:today(),equip:MAIN,type:c.period,cid:c.id,test:c.name,result:'Conforme',ok:'Oui',tech:state.tech.trim(),note:''};
+  state.register.push(e);save();render();
+  toast('« '+shortName(c.name)+' » enregistré comme conforme.','Annuler',function(){state.register=state.register.filter(function(x){return x.id!==e.id;});save();render();});
+}
+
+function setPin(){
+  const changing=!!state.pin;
+  openModal({
+    title:changing?'Changer le code':'Définir un code',
+    body:(changing?'<label>Code actuel<input type="password" name="old" autocomplete="off" autofocus></label>':'')+
+     '<p class="muted">Quatre caractères minimum. Sans ce code, l’application reste en lecture seule.</p>'+
+     '<label>Nouveau code<input type="password" name="a" autocomplete="off"'+(changing?'':' autofocus')+'></label><label>Confirmer le code<input type="password" name="b" autocomplete="off"></label>',
+    onSubmit:async function(d){
+      if(changing&&await hashPin(d.old||'')!==state.pin)return {error:'Code actuel incorrect.'};
+      if((d.a||'').length<4)return {error:'Le nouveau code doit contenir au moins 4 caractères.'};
+      if(d.a!==d.b)return {error:'Les deux codes ne correspondent pas.'};
+      state.pin=await hashPin(d.a);save();locked=false;render();toast('Code enregistré.');return {};
+    }
+  });
+}
+function rmPin(){
+  openModal({
+    title:'Retirer le code',
+    body:'<p class="muted">L’application ne sera plus protégée en lecture seule.</p><label>Code actuel<input type="password" name="old" autocomplete="off" autofocus></label>',
+    submit:'Retirer le code',danger:true,
+    onSubmit:async function(d){
+      if(await hashPin(d.old||'')!==state.pin)return {error:'Code incorrect.'};
+      state.pin=null;save();locked=false;render();toast('Code retiré.');return {};
+    }
+  });
+}
+function unlock(){
+  openModal({
+    title:'Déverrouiller',
+    body:'<label>Code du technicien<input type="password" name="a" autocomplete="off" autofocus></label>',
+    submit:'Déverrouiller',
+    onSubmit:async function(d){
+      if(await hashPin(d.a||'')!==state.pin)return {error:'Code incorrect.'};
+      locked=false;render();return {};
+    }
+  });
+}
+
+/* ---------- Exports ---------- */
+async function saveFile(name,data,type){
+  try{
+    if(DL){await DL.save({filename:name,data:data});return;}
+    const b=new Blob([data],{type:type}),u=URL.createObjectURL(b),a=document.createElement('a');
+    a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},2000);
+  }catch(e){if(e&&e.code==='declined')return;toast('L’export n’est pas disponible dans cet environnement.');}
+}
+const csvCell=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+const toCsv=rows=>'\ufeff'+rows.map(function(r){return r.map(csvCell).join(';');}).join('\r\n');
+const stamp=()=>today();
+
+function expCal(){
+  const s=summary();
+  const rows=[['Contrôle','Partie concernée','Qui peut le réaliser','Source','Périodicité','Dernière réalisation','Prochaine échéance','Statut']].concat(s.cs.map(function(x){return [x.c.name,x.c.part,x.c.resp,x.c.source,x.c.period,fmt(x.s.last),x.s.next?fmt(x.s.next):'',x.s.label];}));
+  saveFile('calendrier-controle-'+stamp()+'.csv',toCsv(rows),'text/csv');
+}
+function expReg(){
+  const rows=[['Date','Équipement','Type de contrôle','Test réalisé','Résultat','Conforme','Technicien','Observation']].concat(state.register.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).map(function(r){return [fmt(r.date),r.equip,r.type,r.test,r.result,r.ok,r.tech,r.note];}));
+  saveFile('registre-controle-qualite-'+stamp()+'.csv',toCsv(rows),'text/csv');
+}
+function expNc(){
+  const rows=[['N°','Équipement','Date','Contrôle à l’origine','Description de l’écart','Cause probable','Action corrective','Délai','Vérification de l’efficacité','Responsable']].concat(state.ncs.slice().sort(function(a,b){return a.num-b.num;}).map(function(n){return ['NC-'+String(n.num).padStart(3,'0'),n.equip,fmt(n.date),n.origin,n.desc,n.cause,n.action,fmt(n.due),n.status,n.resp];}));
+  saveFile('non-conformites-'+stamp()+'.csv',toCsv(rows),'text/csv');
+}
+function expJson(){saveFile('sauvegarde-suivi-qualite-'+stamp()+'.json',JSON.stringify(state,null,2),'application/json');}
+function pdfLib(){
+  try{return (window.jspdf&&window.jspdf.jsPDF)?window.jspdf.jsPDF:null;}catch(e){return null;}
+}
+function expReport(){
+  const jsPDFCtor=pdfLib();
+  if(!jsPDFCtor||!(window.jspdf)){toast('Le générateur de PDF n’a pas pu se charger. Vérifiez la connexion et réessayez.');return;}
+  const s=summary();
+  const doc=new jsPDFCtor({unit:'pt',format:'a4'});
+  const W=doc.internal.pageSize.getWidth(), M=40;
+  const NAVY=[16,27,38], STEEL=[44,74,94], MUTE=[91,107,120], LINE=[214,222,227];
+  let y=48;
+  doc.setFont('helvetica','bold');doc.setFontSize(17);doc.setTextColor.apply(doc,NAVY);
+  doc.text('Rapport de contrôle qualité',M,y);
+  y+=18;doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor.apply(doc,MUTE);
+  doc.text('SPECT/CT Siemens Symbia Pro.Specta X3 — Hôpital Dogta-Lafiè, Lomé',M,y);
+  y+=13;doc.text('Édité le '+fmt(today())+(state.tech?' par '+state.tech:'')+' — Vigie Biomédicale',M,y);
+  y+=10;doc.setDrawColor.apply(doc,LINE);doc.line(M,y,W-M,y);y+=22;
+
+  const kpis=[['Contrôles en retard',String(s.late)],['Contrôles à jour',String(s.ok)],['À réaliser',String(s.due+s.never)],['Taux de conformité',s.rate===null?'—':pct(s.rate)],['Non-conformités ouvertes',String(s.openNc)]];
+  const kw=(W-2*M)/kpis.length;
+  kpis.forEach(function(k,i){
+    const x=M+i*kw;
+    doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor.apply(doc,(k[0]==='Contrôles en retard'&&s.late)||(k[0]==='Non-conformités ouvertes'&&s.openNc)?[156,59,50]:NAVY);
+    doc.text(k[1],x,y);
+    doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,MUTE);
+    doc.text(doc.splitTextToSize(k[0],kw-8),x,y+12);
+  });
+  y+=44;
+
+  function section(title,head,rows,empty){
+    if(y>doc.internal.pageSize.getHeight()-90){doc.addPage();y=48;}
+    doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor.apply(doc,NAVY);
+    doc.text(title,M,y);y+=6;
+    doc.setDrawColor.apply(doc,NAVY);doc.setLineWidth(1.1);doc.line(M,y,M+doc.getTextWidth(title)+2,y);doc.setLineWidth(.4);
+    y+=12;
+    if(!rows.length){
+      doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor.apply(doc,MUTE);
+      doc.text(empty,M,y+6);y+=26;return;
+    }
+    doc.autoTable({
+      startY:y, margin:{left:M,right:M}, head:[head], body:rows,
+      styles:{font:'helvetica',fontSize:8.3,cellPadding:4.5,textColor:[26,36,48],lineColor:LINE,lineWidth:.4,overflow:'linebreak'},
+      headStyles:{fillColor:STEEL,textColor:255,fontStyle:'bold'},
+      alternateRowStyles:{fillColor:[244,246,247]},
+      theme:'grid'
+    });
+    y=doc.lastAutoTable.finalY+22;
+  }
+
+  section('Calendrier de contrôle',['Contrôle','Partie','Responsable','Périodicité','Dernière réalisation','Prochaine échéance','Statut'],
+    s.cs.map(function(x){return [x.c.name,x.c.part,x.c.resp,x.c.period,fmt(x.s.last),x.s.next?fmt(x.s.next):'—',x.s.k==='late'?x.s.detail:x.s.label];}),'');
+
+  section('Registre des contrôles',['Date','Équipement','Type','Test réalisé','Résultat','Conforme','Technicien','Observation'],
+    state.register.slice().sort(function(a,b){return b.date.localeCompare(a.date);}).map(function(r){return [fmt(r.date),r.equip,r.type,r.test,r.result,r.ok,r.tech,r.note];}),
+    'Aucun contrôle enregistré.');
+
+  section('Non-conformités',['N°','Date','Contrôle','Écart constaté','Cause','Action corrective','Statut'],
+    state.ncs.slice().sort(function(a,b){return a.num-b.num;}).map(function(n){return ['NC-'+String(n.num).padStart(3,'0'),fmt(n.date),n.origin,n.desc,n.cause,n.action,n.status];}),
+    'Aucune non-conformité enregistrée.');
+
+  const pages=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pages;i++){
+    doc.setPage(i);
+    doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,MUTE);
+    doc.text('Vigie Biomédicale — Symbia Pro.Specta X3',M,doc.internal.pageSize.getHeight()-24);
+    doc.text('Page '+i+' / '+pages,W-M,doc.internal.pageSize.getHeight()-24,{align:'right'});
+  }
+  saveFile('rapport-controle-qualite-'+stamp()+'.pdf',doc.output('blob'),'application/pdf');
+}
+
+/* ---------- Démonstration ---------- */
+function loadDemo(){
+  const t=today(),R=[],who=state.tech||'Technicien biomédical';
+  const add=function(off,cid,res,ok,note,equip){
+    const c=ctl(cid);R.push({id:uid(),date:addDays(t,off),equip:equip||MAIN,type:c.period,cid:cid,test:c.name,result:res,ok:ok,tech:who,note:note||''});
+  };
+  for(let i=0;i<14;i++){if(i===5||i===6)continue;add(-i,'c1','Vert (OK)','Oui','');}
+  for(let i=0;i<10;i++){add(-i,'c2','Conforme','Oui','');add(-i,'c3','Conforme','Oui','');}
+  [1,8,15].forEach(function(o){add(-o,'c4','Conforme','Oui','');});
+  add(-34,'c5','Non conforme','Non','Calibration non réalisée : source radioactive indisponible.');
+  add(-12,'c6','Conforme','Oui','');add(-12,'c7','Conforme','Oui','');
+  add(-60,'c8','Conforme','Oui','');add(-60,'c9','Conforme','Oui','');
+  ['c10','c11','c12','c13','c14'].forEach(function(c){add(-200,c,'Conforme','Oui','');});
+  add(-2,'c1','Vert (OK)','Oui','','Scanner de simulation');
+  state.register=R;
+  state.ncs=[{id:uid(),num:1,equip:MAIN,date:addDays(t,-34),origin:ctl('c5').name,desc:'Calibration non réalisée : source radioactive indisponible.',cause:'Source de calibration non encore livrée par le fournisseur.',action:'Relance du fournisseur ; réalisation dès réception de la source.',due:addDays(t,14),status:'En attente',resp:who}];
+  state.nextNc=2;state.demo=true;save();render();
+}
+
+/* ---------- Actions ---------- */
+async function act(a,id){
+  if(a==='lock'){locked=true;render();toast('Application verrouillée.');return;}
+  if(a==='unlock')return unlock();
+  if(a==='quick')return quickLog(id);
+  if(a==='newlog')return openLog({});
+  if(a==='log')return openLog({cid:id});
+  if(a==='editlog'){const r=state.register.find(function(x){return x.id===id;});return r&&openLog(r);}
+  if(a==='dellog'){if(!guard())return;if(await askConfirm('Supprimer ce contrôle ?','Cette ligne sera retirée du registre et le calendrier sera recalculé.','Supprimer',true)){state.register=state.register.filter(function(x){return x.id!==id;});save();render();}return;}
+  if(a==='newnc')return openNC({});
+  if(a==='editnc'){const n=state.ncs.find(function(x){return x.id===id;});return n&&openNC(n);}
+  if(a==='delnc'){if(!guard())return;if(await askConfirm('Supprimer cette non-conformité ?','Cette action est définitive.','Supprimer',true)){state.ncs=state.ncs.filter(function(x){return x.id!==id;});save();render();}return;}
+  if(a==='addctl')return openCtl();
+  if(a==='delctl'){if(!guard())return;if(await askConfirm('Supprimer ce contrôle du calendrier ?','Les enregistrements déjà présents dans le registre sont conservés.','Supprimer',true)){state.custom=state.custom.filter(function(x){return x.id!==id;});save();render();}return;}
+  if(a==='setpin'){if(!guard())return;return setPin();}
+  if(a==='rmpin'){if(!guard())return;return rmPin();}
+  if(a==='exp-cal')return expCal();
+  if(a==='exp-reg')return expReg();
+  if(a==='exp-nc')return expNc();
+  if(a==='exp-json')return expJson();
+  if(a==='exp-report')return expReport();
+  if(a==='import'){if(guard())$('#imp').click();return;}
+  if(a==='demo'){
+    if(!guard())return;
+    if(state.register.length||state.ncs.length){if(!(await askConfirm('Charger la démonstration ?','Les données actuelles seront remplacées. Téléchargez d’abord une sauvegarde si nécessaire.','Remplacer',true)))return;}
+    return loadDemo();
+  }
+  if(a==='clear'){
+    if(!guard())return;
+    if(await askConfirm('Tout effacer ?','Le registre, les non-conformités et les contrôles ajoutés seront supprimés. Cette action est définitive.','Tout effacer',true)){
+      const keep={tech:state.tech,pin:state.pin};state=Object.assign(blank(),keep);save();render();
+    }
+  }
+}
+
+/* ---------- Événements ---------- */
+document.addEventListener('click',function(e){
+  const n=e.target.closest('[data-nav]');
+  if(n){view=n.dataset.nav;render();window.scrollTo(0,0);return;}
+  const a=e.target.closest('[data-act]');
+  if(a)act(a.dataset.act,a.dataset.id);
+});
+document.addEventListener('input',function(e){
+  const f=e.target.dataset&&e.target.dataset.f;
+  if(f==='q'){filt.q=e.target.value;renderRegTable();}
+});
+document.addEventListener('change',function(e){
+  const t=e.target,f=t.dataset&&t.dataset.f;
+  if(f==='equip'||f==='ok'){filt[f]=t.value;renderRegTable();}
+  else if(f==='nc'){filt.nc=t.value;render();}
+  else if(t.id==='techname'){state.tech=t.value.trim();save();}
+});
+$('#imp').addEventListener('change',function(ev){
+  const file=ev.target.files&&ev.target.files[0];ev.target.value='';
+  if(!file)return;
+  const rd=new FileReader();
+  rd.onload=async function(){
+    try{
+      const o=JSON.parse(rd.result);
+      if(!o||!Array.isArray(o.register)||!Array.isArray(o.ncs))throw new Error('format');
+      if(await askConfirm('Restaurer cette sauvegarde ?','Les données actuelles seront remplacées par celles du fichier.','Restaurer',true)){
+        const keepPin=state.pin;state=Object.assign(blank(),o);if(keepPin)state.pin=keepPin;save();render();toast('Sauvegarde restaurée.');
+      }
+    }catch(e){toast('Ce fichier n’est pas une sauvegarde valide.');}
+  };
+  rd.readAsText(file);
+});
+
+/* ---------- Démarrage ---------- */
+render();
+(async function(){
+  try{if(window.claude&&window.claude.use){DL=await window.claude.use('downloads');}}catch(e){DL=null;}
+})();
+})();
+</script>
+</body>
+</html>
